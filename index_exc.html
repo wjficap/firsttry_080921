@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <title>Exchange Alley </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="styles_exc.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <script src="script_exc.js"></script>
+
+    <link rel="icon" href="https://img.icons8.com/color/60/000000/blockchain.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/60/000000/blockchain.png">
+</head>
+
+<body onload="show_log()">
+<!-- load log function -->
+
+  <div class="jumbotron">
+      <h1>Wayne's Crypto Exchange Alley</h1>
+  </div>
+
+  <!-- Top row -->
+  <div class="container"> 
+
+      <table id="exctop">
+          <tr>
+            <th>Crypto</th>
+            <th>Fiat</th>
+          </tr>
+          <tr>
+            <td>
+              <form>
+                  <select id="crypto_exc" name="crypto_exc">
+                    <option value="bitcoin">Bitcoin</option>
+                    <option value="ethereum">Ethereum</option>
+                    <option value="cardano">Cardano</option>
+                    <option value="crypto-com-chain">Crypto.com</option>
+                    <option value="polkadot">Polkadot</option>
+                    <option value="matic-network">Polygon</option>
+                  </select>
+              </form>
+            </td>
+
+            <td>
+              <form>
+                  <select id="fiat_exc" name="fiat_exc">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="SGD">SGD</option>
+                    <option value="TWD">TWD</option>
+                    <option value="GBP">GBP</option>
+                    <option value="AUD">AUD</option>
+
+                  </select>
+              </form>
+            </td>
+          </tr>
+        </table>
+
+      <p> Your crypto rate is: <nobr id="id_rate"> </nobr> </p>
+      <input type="button" onclick="data_mess()" value="Crypto Rate by Messari">
+      <p> Your crypto rate is: <nobr id="id_openx"> </nobr> </p>
+      <input type="button" onclick="data_openx()" value="Exchange Rate by OpenX">
+
+  </div>
+
+  <hr>
+
+  <!-- 2nd row  -->
+
+  <div class="w3-cell-row">
+
+      <div class="w3-container w3-cell w3-half" style="text-align: center;">
+          <table id="exc">
+              <tr>
+                <th>SELL Crypto (Receive Fiat)</th>
+                <th>Fiat Rate (Market)</th>
+              </tr>
+              <tr>
+                  <td>
+                      <form action="">
+                          <input type="text" id="id_crypto_in" onkeyup="cal_rate()">
+                          <!-- <input type="button" onclick="calculate()" value="Submit"> -->
+                          <!-- <input type="submit" value="Submit">   -->
+                      </form>
+            
+                  </td>
+
+                <td>
+                  <p id="id_rate_out">  </p>
+                </td>
+              </tr>
+              <!-- === -->
+              <tr>
+                <th>Fiat Received (Exchange)</th>
+                <th>Fees Paid</th>
+              </tr>
+              <tr>
+                  <td>
+                      <form action="">
+                          <input type="text" id="id_fiat_received" onkeyup="cal_comm1()">
+                          <!-- <input type="button" onclick="calculate()" value="Submit"> -->
+                          <!-- <input type="submit" value="Submit">   -->
+                      </form>
+            
+                  </td>
+
+                <td>
+                  <p id="id_fiat_comm"> </p>
+                  <!-- <input type="button" onclick="calculate()" value="calculate comm"> -->
+                </td>
+              </tr>
+
+            </table>
+
+            <p id="id_sell_log"> </p>
+            <input type="button" onclick="sell_log()" value="Log SELL Crypto">
+      </div>
+
+      <div class="w3-container w3-cell w3-half" style="text-align: center;">
+          <table id="exc1">
+              <tr>
+                <th>BUY Crypto (Pay Fiat)</th>
+                <th>Crypto Rate (Market)</th>
+              </tr>
+              <tr>
+                  <td>
+                      <form action="">
+                          <input type="text" id="id_rate_in" onkeyup="cal_rate()">
+                      </form>        
+                  </td>
+
+                <td>
+                  <p id="id_crypto_out"> </p>
+                </td>
+              </tr>
+              <!-- ==== -->
+              <tr>
+                <th>Crypto Received (Exchange)</th>
+                <th>Fees Paid</th>
+              </tr>
+              <tr>
+                  <td>
+                      <form action="">
+                          <input type="text" id="id_crypto_received" onkeyup="cal_comm2()">
+                      </form>        
+                  </td>
+
+                <td>
+                  <p id="id_crypto_comm"> </p>
+                </td>
+              </tr>
+            </table>
+
+            <p id="id_pay_log"> </p>
+            <input type="button" onclick="pay_log()" value="Log BUY Crypto">
+      </div>
+  </div>
+
+</body>
+
+
+<hr>
+
+<p class="container" id="id_txn_log"></p>
+<p class="container">
+  <input type="button" onclick="show_log()" value="Recall Log">
+  <input type="button" onclick="delete_log()" value="Clear Log">
+</p>
+
+<hr>
+
+<footer style="text-align: center; font-style: italic"> 
+
+  API data provided by:<br>
+  messari.io and openexchangerates.org
+</footer>
+
+</html>

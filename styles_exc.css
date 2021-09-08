@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Palette+Mosaic&display=swap');
+
+body {
+    font-family: 'Palette+Mosaic', serif;
+    background-color: #fff;
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    text-align: left;
+}
+
+.container {
+    text-align: center;
+    /* margin-left: auto;
+    margin-right: auto; */
+    /* padding-left: 15px;
+    padding-right: 15px; */
+}
+
+.jumbotron {
+    font-family: 'Style+Script', serif;
+    background-color:darkblue;
+    color: #fff;
+    margin-bottom: 2rem;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 48px;
+}
+
+
+input[type="text"] {
+    line-height: 1.8;
+    width: auto;
+    text-align: center;
+}
+
+input[type="text"]:hover {
+    background-color:darkgrey;
+    transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+
+ 
+#exctop {
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+#exc, #exc1 {
+  width: 100%;
+}
+ 
+#exc td, #exc th, #exc1 td, #exc1 th, #exctop td, #exctop th {
+border: 1px solid #ddd;
+padding: 8px;
+width: 50%;
+}
+
+/* #exc tr:nth-child(even){
+  background-color: #f2f2f2;
+} */
+
+#exc th, #exctop th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  /* text-align: left; */
+  background-color: indigo;
+  color: white;
+}
+
+#exc1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  /* text-align: left; */
+  background-color:steelblue;
+  color: white;
+}

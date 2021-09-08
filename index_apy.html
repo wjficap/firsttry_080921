@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <title>Wayne's Mining Rig </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="styles_apy.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <script src="script_apy.js"></script>
+
+    <link rel="apple-touch-icon" href="https://img.icons8.com/plasticine/60/26e07f/bitcoin.png">
+</head>
+
+
+
+<body>
+    <div class="jumbotron">
+        <h1>Wayne's Crypto Mining Rig</h1>
+    </div>
+
+
+    <div class="container">
+        <input type="button" onclick="data_update()" value="Update from CoinGekco">
+        <input type="button" onclick="calculatecro()" value="Calculate Rewards">
+
+        <p> Your CRO chain apy is: <mark id="id_apy"> </mark>% </p>
+        <p> Your total daily income is: S$  <mark id="id_sgdperday"></mark> </p>
+        <p> Your monthly income from CRO chain is: S$  <mark id="id_sgd_cro_permth"></mark> </p>
+        <p> Your total monthly income is: S$  <mark id="id_sgdpermth"></mark> </p>
+
+    </div>
+</body>
+
+<hr>
+
+<div class="w3-cell-row">
+
+    <div class="w3-container w3-cell w3-third" style="text-align: center;">
+        <h3 style="color: darkblue;"><strong>Delegation Status</strong></h3>  
+        <h5>
+            <a style="color: red;" href="https://crypto.org/explorer/" target="_blank">Current Onchain Delegation (link)</a>
+        </h5>
+
+        <input type="text" id="id_delegated" value = "3.549" onkeyup="calculatecro()"> bn
+    </div>
+
+    <div class="w3-container w3-cell w3-third" style="text-align: center;">
+        <h3 style="color: darkblue;"><strong>Coins Held</h3><br>  
+        CRO held: <input type="text" id="id_croheld" value = "1200000" onkeyup="calculatecro()"><br><br>
+        DOT held: <input type="text" id="id_dotheld" value = "2172.22" onkeyup="calculatecro()"><br><br>
+        MATIC held: <input type="text" id="id_maticheld" value = "38745.6" onkeyup="calculatecro()">
+    </div>
+
+
+
+    <div class="w3-container w3-cell w3-third" style="text-align: center;">
+        <h3 style="color: darkblue;"><strong>CRO Price</strong></h3>
+        <h5> BTC price (USD):  <nobr id="btcusd">USD</nobr></h5>
+        <h5> CRO price (USD):  <nobr id="crousd">USD</nobr></h5>
+        <h5> CRO price (SGD):  <nobr id="crosgd">SGD</nobr></h5>
+        <h5> MATIC price (SGD):  <nobr id="maticsgd">SGD</nobr></h5>
+        <h5> DOT price (SGD):  <nobr id="dotsgd">SGD</nobr></h5>
+    </div>
+</div>
+
+<hr>
+
+<footer style="text-align: center; font-style: italic ;">Data provided by CoinGecko</footer>
+</html>

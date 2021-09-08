@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>Wayne's Sleep Timer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+        <script src="script_timer.js"></script>
+
+        <link rel="icon" href="https://img.icons8.com/color/60/000000/sleeping-baby.png">        
+        <link rel="apple-touch-icon" href="https://img.icons8.com/color/60/000000/sleeping-baby.png">
+
+        <style>
+            body {
+                background-color: lightseagreen;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <div class="w3-container">
+            <p class="w3-large" style="text-align: center;">Wayne's Sleep Timer</p>
+        </div>
+    
+
+        <div class="w3-container w3-row">
+            
+            <div class="w3-container w3-half" style="text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1606232008952-d52169117037?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80"
+                    class="w3-round-large" style="width:75%"> <br> <br>
+                    <input type="button" onclick="start_timer()" value="Start Timer"> <br> <br>
+                    <input type="button" onclick="recall_start_timer()" value="Recall Start Timer"> 
+                    <p id="start_timer">Sleepy Wayne</p>
+            </div>
+                        
+            <div class="w3-container w3-half" style="text-align: center;">
+                    <img src="https://images.unsplash.com/photo-1585075765856-a50ff2083807?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" 
+                    class="w3-round-large" style="width:75%"> <br> <br>
+                    <input type="button" onclick="end_timer(); how_long_f();" value="End Timer"> 
+
+                    <p id="end_timer">Wake Up Wayne</p>
+            </div>
+            
+        </div>
+           
+
+    </body>
+
+ 
+    <p style="text-align: center;"> You slept for <nobr id="id_how_long_hrs">0 </nobr> hours and <nobr id="id_how_long_mins"> 0 </nobr> minutes. </p> 
+
+</html> 
+
