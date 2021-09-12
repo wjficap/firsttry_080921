@@ -8,6 +8,8 @@ function record() {
 
   localStorage.setItem("input_memo_log", document.getElementById('id_show').innerHTML);
   
+  document.getElementById('id_input').value = "";
+
 }
 
 function recall() {
