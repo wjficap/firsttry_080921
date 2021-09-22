@@ -23,3 +23,17 @@ function clear_all() {
   
 }
 
+function copy_all() {
+  var copyText = document.getElementById('id_show').innerText;
+
+
+  /* Select the text field */
+  // copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+
+  alert(copyText);
+
+  navigator.clipboard.writeText(copyText);
+
+}
