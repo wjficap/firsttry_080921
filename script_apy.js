@@ -25,6 +25,7 @@ function calculatecro()
     // @rate changed to 8% flexible
     var maticdaily = (8 / 100 *maticheld / 365);
     // @rate changed to 8% flexible
+    // 
 
     var sgdperday = crodaily * crosgdf1 + dotdaily * dotsgdf1 + maticdaily * maticsgdf1;
     var sgd_cro_perday = crodaily * crosgdf1;
