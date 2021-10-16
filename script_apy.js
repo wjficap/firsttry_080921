@@ -21,8 +21,10 @@ function calculatecro()
 
     var apy = (407.48 / delegated /10).toFixed(2);
     var crodaily = (apy / 100 *croheld / 365);
-    var dotdaily = (10 / 100 *dotheld / 365);
-    var maticdaily = (10 / 100 *maticheld / 365);
+    var dotdaily = (8 / 100 *dotheld / 365);
+    // @rate changed to 8% flexible
+    var maticdaily = (8 / 100 *maticheld / 365);
+    // @rate changed to 8% flexible
 
     var sgdperday = crodaily * crosgdf1 + dotdaily * dotsgdf1 + maticdaily * maticsgdf1;
     var sgd_cro_perday = crodaily * crosgdf1;
