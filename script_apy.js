@@ -20,7 +20,10 @@ function calculatecro()
 
 
     var apy = (407.48 / delegated /10).toFixed(2);
-    var crodaily = (apy / 100 *croheld / 365);
+    // var crodaily = (apy / 100 *croheld / 365);
+    // (changed to 2% because of Earn 14 Nov 2021)
+    var crodaily = (2 / 100 *croheld / 365);
+    
     var dotdaily = (8 / 100 *dotheld / 365);
     // @rate changed to 8% flexible
     var maticdaily = (8 / 100 *maticheld / 365);
