@@ -33,8 +33,8 @@ function calculatecro()
     var sgdperday = crodaily * crosgdf1 + dotdaily * dotsgdf1 + maticdaily * maticsgdf1;
     var sgd_cro_perday = crodaily * crosgdf1;
 
-    document.querySelector("#id_apy").innerHTML = apy;
-    document.querySelector("#id_sgd_cro_permth").innerHTML = (sgd_cro_perday * 30).toFixed(2);
+    // document.querySelector("#id_apy").innerHTML = apy;
+    // document.querySelector("#id_sgd_cro_permth").innerHTML = (sgd_cro_perday * 30).toFixed(2);
     document.querySelector("#id_sgdperday").innerHTML = (sgdperday).toFixed(2);
     document.querySelector("#id_sgdperwk").innerHTML = (sgdperday * 7).toFixed(2);
     document.querySelector("#id_sgdpermth").innerHTML = (sgdperday * 30).toFixed(2);
