@@ -22,7 +22,7 @@ function calculatecro()
     var apy = (407.48 / delegated /10).toFixed(2);
     // var crodaily = (apy / 100 *croheld / 365);
     // (changed to 2% because of Earn 14 Nov 2021)
-    var crodaily = (2 / 100 *croheld / 365);
+    var crodaily = (10 / 100 *croheld / 365);
     
     var dotdaily = (8 / 100 *dotheld / 365);
     // @rate changed to 8% flexible
@@ -37,7 +37,7 @@ function calculatecro()
     // document.querySelector("#id_sgd_cro_permth").innerHTML = (sgd_cro_perday * 30).toFixed(2);
     document.querySelector("#id_sgdperday").innerHTML = (sgdperday).toFixed(2);
     document.querySelector("#id_sgdperwk").innerHTML = (sgdperday * 7).toFixed(2);
-    document.querySelector("#id_sgdpermth").innerHTML = (sgdperday * 30).toFixed(2);
+    document.querySelector("#id_sgdpermth").innerHTML = (sgdperday * 365 / 12).toFixed(2);
 }
 
 
