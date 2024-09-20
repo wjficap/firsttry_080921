@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        input, button, textarea {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Countdown Tracker</h1>
+
+    <label for="note">Event Note:</label><br>
+    <textarea id="note" rows="3" cols="40"></textarea><br>
+
+    <label for="date">Select Date:</label><br>
+    <input type="date" id="date"><br>
+
+    <button onclick="addNote()">Add Event</button>
+    <button onclick="exportData()">Export Data</button><br>
+
+    <h2>Import Data:</h2>
+    <input type="file" id="fileInput" accept=".json">
+    <button onclick="importData()">Import Data</button><br>
+
+    <h2>Events:</h2>
+    <table id="eventsTable">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Days Left</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let events = [];
+
+        function calculateDaysLeft(date) {
+            const eventDate = new Date(date);
+            const today = new Date();
+            const diffTime = eventDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        function addNote() {
+            const note = document.getElementById('note').value;
+            const date = document.getElementById('date').value;
+
+            if (note && date) {
+                events.push({ note, date });
+                updateTable();
+                clearInputs();
+            } else {
+                alert("Please enter both a note and a date.");
+            }
+        }
+
+        function updateTable() {
+            const tbody = document.querySelector("#eventsTable tbody");
+            tbody.innerHTML = ""; // Clear previous rows
+
+            events.forEach((event, index) => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = event.note;
+                row.insertCell(1).textContent = event.date;
+                row.insertCell(2).textContent = calculateDaysLeft(event.date); // Dynamically update days left
+                const deleteCell = row.insertCell(3);
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = () => deleteEvent(index);
+                deleteCell.appendChild(deleteButton);
+            });
+        }
+
+        function clearInputs() {
+            document.getElementById('note').value = "";
+            document.getElementById('date').value = "";
+        }
+
+        function deleteEvent(index) {
+            events.splice(index, 1); // Remove the event from the array
+            updateTable(); // Update the table
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(events);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'events_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const importedData = JSON.parse(event.target.result);
+                        if (Array.isArray(importedData)) {
+                            events = importedData;
+                            updateTable();
+                        } else {
+                            alert("Invalid data format");
+                        }
+                    } catch (error) {
+                        alert("Error importing data. Please check the format.");
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert("Please select a file to import.");
+            }
+        }
+    </script>
+
+</body>
+</html>
