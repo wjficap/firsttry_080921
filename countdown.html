@@ -37,11 +37,10 @@
     <input type="date" id="date"><br>
 
     <button onclick="addNote()">Add Event</button>
-    <button onclick="exportData()">Export Data</button><br>
+    <button onclick="exportToGist()">Export to Gist</button><br>
 
-    <h2>Import Data:</h2>
-    <input type="file" id="fileInput" accept=".json">
-    <button onclick="importData()">Import Data</button><br>
+    <h2>Import Data from Gist:</h2>
+    <button onclick="importFromGist()">Import from Gist</button><br>
 
     <h2>Events:</h2>
     <table id="eventsTable">
@@ -57,7 +56,7 @@
     </table>
 
     <script>
-        let events = [];
+        let events = JSON.parse(localStorage.getItem('events')) || [];
 
         function calculateDaysLeft(date) {
             const eventDate = new Date(date);
@@ -74,6 +73,7 @@
             if (note && date) {
                 events.push({ note, date });
                 updateTable();
+                saveToLocalStorage();
                 clearInputs();
             } else {
                 alert("Please enter both a note and a date.");
@@ -105,43 +105,56 @@
         function deleteEvent(index) {
             events.splice(index, 1); // Remove the event from the array
             updateTable(); // Update the table
+            saveToLocalStorage(); // Save updated events to localStorage
         }
 
-        function exportData() {
-            const dataStr = JSON.stringify(events);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'events_data.json';
-            a.click();
-            URL.revokeObjectURL(url);
+        function saveToLocalStorage() {
+            localStorage.setItem('events', JSON.stringify(events));
         }
 
-        function importData() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+        function exportToGist() {
+            const gistUrl = 'https://api.github.com/gists/a94c46e7e3024f0b173d1a9cc9f32827'; // Replace with your gist ID
+            const data = { files: { 'events.json': { content: JSON.stringify(events, null, 2) } } };
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    try {
-                        const importedData = JSON.parse(event.target.result);
-                        if (Array.isArray(importedData)) {
-                            events = importedData;
-                            updateTable();
-                        } else {
-                            alert("Invalid data format");
-                        }
-                    } catch (error) {
-                        alert("Error importing data. Please check the format.");
-                    }
-                };
-                reader.readAsText(file);
-            } else {
-                alert("Please select a file to import.");
-            }
+            fetch(gistUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': 'token YOUR_GITHUB_TOKEN', // Replace with your GitHub token
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                alert('Exported to Gist successfully!');
+            })
+            .catch(error => {
+                console.error('There was a problem exporting to Gist:', error);
+            });
         }
+
+        function importFromGist() {
+            const gistUrl = 'https://gist.githubusercontent.com/wjficap/a94c46e7e3024f0b173d1a9cc9f32827/raw/b7df9f4b17ccfddcc2212246e823f11e19f70c3d/events.json';
+
+            fetch(gistUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    events = data;
+                    updateTable();
+                    saveToLocalStorage(); // Save imported events to localStorage
+                    alert('Imported from Gist successfully!');
+                })
+                .catch(error => {
+                    console.error('There was a problem importing from Gist:', error);
+                });
+        }
+
+        // Load the events when the page is loaded
+        updateTable();
+
     </script>
 
 </body>
