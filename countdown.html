@@ -113,23 +113,35 @@
         }
 
         function exportToGist() {
-            const gistUrl = 'https://api.github.com/gists/a94c46e7e3024f0b173d1a9cc9f32827'; // Replace with your gist ID
-            const data = { files: { 'events.json': { content: JSON.stringify(events, null, 2) } } };
+            const gistUrl = 'https://api.github.com/gists/a94c46e7e3024f0b173d1a9cc9f32827'; // Your Gist ID
+            const data = { 
+                files: { 
+                    'events.json': { 
+                        content: JSON.stringify(events, null, 2) 
+                    } 
+                } 
+            };
 
             fetch(gistUrl, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': 'token YOUR_GITHUB_TOKEN', // Replace with your GitHub token
                     'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             })
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error('Network response was not ok: ' + response.statusText);
+                return response.json(); // Log the response for further inspection
+            })
+            .then(data => {
+                console.log('Exported to Gist successfully:', data); // Log the successful response
                 alert('Exported to Gist successfully!');
             })
             .catch(error => {
                 console.error('There was a problem exporting to Gist:', error);
+                alert('Failed to export to Gist. Check the console for details.');
             });
         }
 
