@@ -3,60 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin Price Alarm</title>
+    <title>Countdown Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            margin: 20px;
         }
-        #price {
-            font-size: 2em;
-            margin: 20px 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        input, button, textarea {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Bitcoin Price Checker</h1>
-    <div id="price">Loading...</div>
-    
-    <input type="number" id="targetPrice" placeholder="Set Alarm Price" />
-    <button onclick="setAlarm()">Set Alarm</button>
-    
-    <audio id="alarmSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+    <h1>Countdown Tracker</h1>
+
+    <label for="note">Event Note:</label><br>
+    <textarea id="note" rows="3" cols="40"></textarea><br>
+
+    <label for="date">Select Date:</label><br>
+    <input type="date" id="date"><br>
+
+    <button onclick="addNote()">Add Event</button>
+    <button onclick="exportToGist()">Export to Gist</button><br>
+
+    <h2>Import Data from Gist:</h2>
+    <button onclick="importFromGist()">Import from Gist</button><br>
+
+    <h2>Events:</h2>
+    <table id="eventsTable">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Days Left</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        let alarmPrice = null;
+        let events = JSON.parse(localStorage.getItem('events')) || [];
 
-        async function fetchBitcoinPrice() {
-            const response = await fetch('https://api.coindesk.com/v1/bpi/currentprice/BTC.json');
-            const data = await response.json();
-            const price = data.bpi.USD.rate_float;
-            document.getElementById('price').innerText = `Current Price: $${price.toFixed(2)}`;
-            checkAlarm(price);
+        function calculateDaysLeft(date) {
+            const eventDate = new Date(date);
+            const today = new Date();
+            const diffTime = eventDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
         }
 
-        function checkAlarm(currentPrice) {
-            if (alarmPrice !== null && currentPrice >= alarmPrice) {
-                document.getElementById('alarmSound').play();
-                alert(`Bitcoin has reached your alarm price of $${alarmPrice}!`);
-                alarmPrice = null; // Reset the alarm
-            }
-        }
+        function addNote() {
+            const note = document.getElementById('note').value;
+            const date = document.getElementById('date').value;
 
-        function setAlarm() {
-            const inputPrice = document.getElementById('targetPrice').value;
-            alarmPrice = parseFloat(inputPrice);
-            if (isNaN(alarmPrice)) {
-                alert('Please enter a valid number for the alarm price.');
+            if (note && date) {
+                events.push({ note, date });
+                updateTable();
+                saveToLocalStorage();
+                clearInputs();
             } else {
-                alert(`Alarm set for $${alarmPrice}!`);
+                alert("Please enter both a note and a date.");
             }
         }
 
-        // Fetch price every 10 seconds
-        setInterval(fetchBitcoinPrice, 10000);
-        fetchBitcoinPrice(); // Initial fetch
+        function updateTable() {
+            const tbody = document.querySelector("#eventsTable tbody");
+            tbody.innerHTML = ""; // Clear previous rows
+
+            events.forEach((event, index) => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = event.note;
+                row.insertCell(1).textContent = event.date;
+                row.insertCell(2).textContent = calculateDaysLeft(event.date); // Dynamically update days left
+                const deleteCell = row.insertCell(3);
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = () => deleteEvent(index);
+                deleteCell.appendChild(deleteButton);
+            });
+        }
+
+        function clearInputs() {
+            document.getElementById('note').value = "";
+            document.getElementById('date').value = "";
+        }
+
+        function deleteEvent(index) {
+            events.splice(index, 1); // Remove the event from the array
+            updateTable(); // Update the table
+            saveToLocalStorage(); // Save updated events to localStorage
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('events', JSON.stringify(events));
+        }
+
+        function exportToGist() {
+            const gistUrl = 'https://api.github.com/gists/a94c46e7e3024f0b173d1a9cc9f32827'; // Replace with your gist ID
+            const data = { files: { 'events.json': { content: JSON.stringify(events, null, 2) } } };
+
+            fetch(gistUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': 'token YOUR_GITHUB_TOKEN', // Replace with your GitHub token
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                alert('Exported to Gist successfully!');
+            })
+            .catch(error => {
+                console.error('There was a problem exporting to Gist:', error);
+            });
+        }
+
+        function importFromGist() {
+            const gistUrl = 'https://gist.githubusercontent.com/wjficap/a94c46e7e3024f0b173d1a9cc9f32827/raw/b7df9f4b17ccfddcc2212246e823f11e19f70c3d/events.json';
+
+            fetch(gistUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    events = data;
+                    updateTable();
+                    saveToLocalStorage(); // Save imported events to localStorage
+                    alert('Imported from Gist successfully!');
+                })
+                .catch(error => {
+                    console.error('There was a problem importing from Gist:', error);
+                });
+        }
+
+        // Load the events when the page is loaded
+        updateTable();
+
     </script>
+
 </body>
 </html>
