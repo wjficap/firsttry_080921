@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Gist Exporter</title>
+    <title>Text JSONBin Exporter</title>
 </head>
 <body>
-    <h1>Text Gist Exporter</h1>
+    <h1>Text JSONBin Exporter</h1>
     <textarea id="textArea" rows="10" cols="30"></textarea><br>
-    <button id="exportButton">Export to Gist</button>
-    <button id="importButton">Import from Gist</button>
+    <button id="exportButton">Export to JSONBin</button>
+    <button id="importButton">Import from JSONBin</button>
     <button id="clearButton">Clear</button>
-    <pre id="gistContent"></pre>
+    <pre id="binContent"></pre>
 
     <script>
         const exportButton = document.getElementById('exportButton');
@@ -20,55 +19,47 @@
         const clearButton = document.getElementById('clearButton');
         const textArea = document.getElementById('textArea');
 
-        const GITHUB_API_URL = 'https://api.github.com/gists';
-        const GITHUB_TOKEN = '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'; // Replace with your GitHub token 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
+        const JSONBIN_API_URL = 'https://api.jsonbin.io/v3/bins';
+        const JSONBIN_KEY = '$2a$10$ZwyIhgFoWb1I0WyxuXIHDeiWAtsynZSoLUkjp472YsWrk31t.qiB6'; // Replace with your JSONBin API key
 
         exportButton.addEventListener('click', async () => {
             const content = textArea.value;
-            const response = await fetch(GITHUB_API_URL, {
+            const response = await fetch(JSONBIN_API_URL, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_KEY // Use your JSONBin API key
                 },
-                body: JSON.stringify({
-                    description: 'Text Gist',
-                    public: true,
-                    files: {
-                        'events.json': {
-                            content: content
-                        }
-                    }
-                })
+                body: JSON.stringify({ content: content })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                alert(`Gist created: ${data.html_url}`);
+                alert(`Data saved in JSONBin: ${data.metadata.id}`);
                 textArea.value = '';
             } else {
                 const errorData = await response.json();
-                alert(`Error creating gist: ${errorData.message}`);
+                alert(`Error saving to JSONBin: ${errorData.message}`);
                 console.error('Error details:', errorData);
             }
         });
 
         importButton.addEventListener('click', async () => {
-            const gistId = prompt('Enter Gist ID:');
-            if (!gistId) return; // Exit if no Gist ID is provided
+            const binId = prompt('Enter JSONBin ID:');
+            if (!binId) return; // Exit if no ID is provided
 
-            const response = await fetch(`${GITHUB_API_URL}/${gistId}`);
-            
+            const response = await fetch(`${JSONBIN_API_URL}/${binId}`, {
+                headers: {
+                    'X-Master-Key': JSONBIN_KEY // Use your JSONBin API key
+                }
+            });
+
             if (response.ok) {
                 const data = await response.json();
-                if (data.files && data.files['events.json']) {
-                    textArea.value = data.files['events.json'].content;
-                } else {
-                    alert('No file named "events.json" found in this Gist.');
-                }
+                textArea.value = data.record.content; // Adjusted to retrieve the content
             } else {
                 const errorData = await response.json();
-                alert(`Error fetching gist: ${errorData.message}`);
+                alert(`Error fetching from JSONBin: ${errorData.message}`);
                 console.error('Error details:', errorData);
             }
         });
@@ -79,3 +70,4 @@
     </script>
 </body>
 </html>
+
