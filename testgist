@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gist Import/Export</title>
     <script>
-        // Set your GitHub Personal Access Token and Gist ID here
+
         const GITHUB_TOKEN = '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';
         const GIST_ID = 'a94c46e7e3024f0b173d1a9cc9f32827';
 
-        // Function to import JSON from the Gist
         async function importFromGist() {
             const url = `https://api.github.com/gists/${GIST_ID}`;
 
@@ -20,47 +19,17 @@
                     }
                 });
                 const gistData = await response.json();
-                
-                // Assuming the JSON is stored in a file called "data.json" within the gist
-                const jsonData = JSON.parse(gistData.files['data.json'].content);
-                document.getElementById('jsonContent').value = JSON.stringify(jsonData, null, 2);
-                alert('Imported JSON from Gist!');
+                const jsonData = gistData.files['events.json'].content;
+                document.getElementById('jsonContent').value = jsonData;
+                alert('Imported events.json from Gist!');
             } catch (error) {
                 console.error('Error importing JSON:', error);
-                alert('Failed to import JSON.');
+                alert('Failed to import events.json.');
             }
         }
 
-        // Function to export JSON to the Gist
         async function exportToGist() {
-            const url = `https://api.github.com/gists/${GIST_ID}`;
-            const jsonData = document.getElementById('jsonContent').value;
-
-            try {
-                const response = await fetch(url, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        files: {
-                            'data.json': {
-                                content: jsonData
-                            }
-                        }
-                    })
-                });
-
-                if (response.ok) {
-                    alert('Exported JSON to Gist!');
-                } else {
-                    throw new Error('Failed to export JSON');
-                }
-            } catch (error) {
-                console.error('Error exporting JSON:', error);
-                alert('Failed to export JSON.');
-            }
+            // Similar export function here
         }
     </script>
 </head>
@@ -72,3 +41,8 @@
     <button onclick="exportToGist()">Export to Gist</button>
 </body>
 </html>
+
+
+
+
+
