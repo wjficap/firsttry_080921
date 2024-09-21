@@ -18,7 +18,6 @@
         const importButton = document.getElementById('importButton');
         const clearButton = document.getElementById('clearButton');
         const textArea = document.getElementById('textArea');
-        const gistContent = document.getElementById('gistContent');
 
         const GITHUB_API_URL = 'https://api.github.com/gists';
         const GITHUB_TOKEN = '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'; // Replace with your GitHub token
@@ -35,22 +34,42 @@
                     description: 'Text Gist',
                     public: true,
                     files: {
-                        'events.json': {
+                        'text.txt': {
                             content: content
                         }
                     }
                 })
             });
-            const data = await response.json();
-            alert(`Gist created: ${data.html_url}`);
-            textArea.value = '';
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(`Gist created: ${data.html_url}`);
+                textArea.value = '';
+            } else {
+                const errorData = await response.json();
+                alert(`Error creating gist: ${errorData.message}`);
+                console.error('Error details:', errorData);
+            }
         });
 
         importButton.addEventListener('click', async () => {
             const gistId = prompt('Enter Gist ID:');
+            if (!gistId) return; // Exit if no Gist ID is provided
+
             const response = await fetch(`${GITHUB_API_URL}/${gistId}`);
-            const data = await response.json();
-            textArea.value = data.files['text.txt'].content;
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.files && data.files['text.txt']) {
+                    textArea.value = data.files['text.txt'].content;
+                } else {
+                    alert('No file named "text.txt" found in this Gist.');
+                }
+            } else {
+                const errorData = await response.json();
+                alert(`Error fetching gist: ${errorData.message}`);
+                console.error('Error details:', errorData);
+            }
         });
 
         clearButton.addEventListener('click', () => {
