@@ -20,7 +20,7 @@
         const textArea = document.getElementById('textArea');
 
         const JSONBIN_API_URL = 'https://api.jsonbin.io/v3/bins';
-        const JSONBIN_KEY = '$2a$10$ZwyIhgFoWb1I0WyxuXIHDeiWAtsynZSoLUkjp472YsWrk31t.qiB6'; // Replace with your JSONBin API key
+        const JSONBIN_KEY = '$2a$10$ZwyIhgFoWb1I0WyxuXIHDeiWAtsynZSoLUkjp472YsWrk31t.qiB'; // Replace with your JSONBin API key
 
         exportButton.addEventListener('click', async () => {
             const content = textArea.value;
@@ -35,12 +35,13 @@
 
             if (response.ok) {
                 const data = await response.json();
-                alert(`Data saved in JSONBin: ${data.metadata.id}`);
+                console.log('Response from JSONBin:', data); // Log the full response
+                alert(`Data saved in JSONBin: ${data.metadata.id}`); // Display the ID
                 textArea.value = '';
             } else {
-                const errorData = await response.json();
-                alert(`Error saving to JSONBin: ${errorData.message}`);
-                console.error('Error details:', errorData);
+                const errorText = await response.text(); // Get the raw response
+                console.error('Error response:', errorText); // Log the raw response
+                alert(`Error saving to JSONBin: ${errorText}`);
             }
         });
 
@@ -58,9 +59,9 @@
                 const data = await response.json();
                 textArea.value = data.record.content; // Adjusted to retrieve the content
             } else {
-                const errorData = await response.json();
-                alert(`Error fetching from JSONBin: ${errorData.message}`);
-                console.error('Error details:', errorData);
+                const errorText = await response.text(); // Get the raw response
+                console.error('Error fetching from JSONBin:', errorText); // Log the raw response
+                alert(`Error fetching from JSONBin: ${errorText}`);
             }
         });
 
