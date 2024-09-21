@@ -60,10 +60,10 @@
             
             if (response.ok) {
                 const data = await response.json();
-                if (data.files && data.files['text.txt']) {
-                    textArea.value = data.files['text.txt'].content;
+                if (data.files && data.files['events.json']) {
+                    textArea.value = data.files['events.json'].content;
                 } else {
-                    alert('No file named "text.txt" found in this Gist.');
+                    alert('No file named "events.json" found in this Gist.');
                 }
             } else {
                 const errorData = await response.json();
